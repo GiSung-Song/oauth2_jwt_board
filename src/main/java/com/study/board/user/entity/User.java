@@ -30,4 +30,8 @@ public class User {
     private String providerId; //소셜 ID의 고유번호(PK)
 
     private String refreshToken; //JWT 리프레시 토큰
+
+    public void updateRefreshToken(String updateRefreshToken) {
+        this.refreshToken = updateRefreshToken;
+    }
 }

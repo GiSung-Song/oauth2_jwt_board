@@ -38,3 +38,6 @@ out/
 
 ### mysql ###
 application-mysql.yml
+
+### jwt ###
+application-jwt.yml
