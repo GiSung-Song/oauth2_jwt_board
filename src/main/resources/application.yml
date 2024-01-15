@@ -12,6 +12,7 @@ spring:
     import:
       - application-mysql.yml
       - application-jwt.yml
+      - application-oauth.yml
 
   jpa:
     hibernate:

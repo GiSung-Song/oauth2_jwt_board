@@ -9,6 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class UserSignUpDto {
 
+    private String username; //이름
     private String email; //이메일
     private String password; //비밀번호
     private String nickname; //별칭
