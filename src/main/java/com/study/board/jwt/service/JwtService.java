@@ -2,6 +2,7 @@ package com.study.board.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.study.board.user.entity.User;
 import com.study.board.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -70,7 +71,7 @@ public class JwtService {
         log.info("AccessToken : {}", accessToken);
 
         response.setStatus(HttpServletResponse.SC_OK); //200 성공
-        response.setHeader(accessHeader, accessToken); //Authorization : accessToken
+        response.setHeader(accessHeader,BEARER + accessToken); //Authorization : accessToken
     }
 
     //AccessToken + RefreshToken 헤더에 담기
@@ -79,8 +80,8 @@ public class JwtService {
         log.info("RefreshToken : {}", refreshToken);
 
         response.setStatus(HttpServletResponse.SC_OK);
-        response.setHeader(accessHeader, accessToken); //Authorization : accessToken
-        response.setHeader(refreshHeader, refreshToken); //Authorization-refresh : refreshToken
+        response.setHeader(accessHeader, BEARER + accessToken); //Authorization : Bearer accessToken
+        response.setHeader(refreshHeader, BEARER + refreshToken); //Authorization-refresh : Bearer refreshToken
     }
 
     //refresh 토큰 추출
@@ -132,5 +133,18 @@ public class JwtService {
 
             return false;
         }
+    }
+
+    //사용자 가져오기
+    public User getUser(String token) {
+        String username = JWT.require(Algorithm.HMAC512(secretKey)).build().verify(token).getClaim(EMAIL_CLAIM).asString();
+
+        if (username != null) {
+            User userEntity = userRepository.findByEmail(username).orElse(null);
+
+            return userEntity;
+        }
+
+        return null;
     }
 }

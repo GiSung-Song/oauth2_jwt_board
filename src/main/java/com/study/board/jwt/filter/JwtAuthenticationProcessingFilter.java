@@ -32,12 +32,20 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+
+        log.info("1. 필터 호출");
+        log.info("1. Request URI : {}", request.getRequestURI());
+
         // /login 요청이 오면
         if (request.getRequestURI().equals(NO_CHECK_URL)) {
             //다음 filter 실행
             filterChain.doFilter(request, response);
             return; //이후 필터 진행 막기
         }
+
+        log.info("2. 로그인 호출이 아님");
+
+        log.info("3. 액세스 토큰 검증");
 
         // 사용자 요청에서 refreshToken 호출
         // refreshToken이 없거나 유효하지 않다면 null 반환
@@ -53,14 +61,20 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
             return; //refresh 토큰과 Access 토큰을 재발급 해주고 인증 처리는 하지 않음.
         }
 
+        // 액세스 토큰만 있는 경우
         if (refreshToken == null) {
             checkAccessTokenAndAuthentication(request, response, filterChain);
         }
+
+        log.info("4. 필터 끝남");
     }
 
-    // 리프레시 토큰으로 user를 찾고 refreshToken 재발급 후
-    // 리프레시 토큰과 액세스 토큰을 헤더에 담기
+    //  리프레시 토큰으로 user를 찾고 refreshToken 재발급 후
+    //  리프레시 토큰과 액세스 토큰을 헤더에 담기
     private void checkRefreshTokenAndReIssueAccessToken(HttpServletResponse response, String refreshToken) {
+
+        log.info("checkRefreshTokenAndReIssueAccessToken 필터 실행");
+
         userRepository.findByRefreshToken(refreshToken)
                 .ifPresent(user -> {
                     String reIssuedRefreshToken = reIssueRefreshToken(user);
@@ -78,8 +92,11 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     }
 
     // 액세스 토큰 검증 및 인증 처리
+
     private void checkAccessTokenAndAuthentication(HttpServletRequest request, HttpServletResponse response,
                                                    FilterChain filterChain) throws ServletException, IOException {
+
+        log.info("checkAccessTokenAndAuthentication 필터 실행");
 
         jwtService.extractAccessToken(request) //AccessToken 추출
                 .filter(jwtService::isTokenValid) //토큰 유효성 검사
@@ -92,6 +109,9 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
 
     //인증 정보 저장
     private void saveAuthentication(User user) {
+
+        log.info("saveAuthentication 실행");
+
         String password = user.getPassword();
 
         if (password == null) { //소셜 로그인 유저의 비밀번호를 임의로 설정하여 소셜 로그인 유저도 인증 되도록 설정
