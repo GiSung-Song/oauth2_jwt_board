@@ -10,6 +10,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.UUID;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -38,7 +40,7 @@ public class UserService {
                 .username(userSignUpDto.getUsername())
                 .email(userSignUpDto.getEmail())
                 .password(passwordEncoder.encode(userSignUpDto.getPassword())) //비밀번호를 암호화한 뒤 저장
-                .nickname(userSignUpDto.getNickname())
+                .nickname(UUID.randomUUID().toString())
                 .role(Role.MEMBER)
                 .build();
 

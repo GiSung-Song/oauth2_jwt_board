@@ -59,7 +59,8 @@ public class SecurityConfig {
                         .userInfoEndpoint(service -> service
                                 .userService(customOAuth2UserService)))
                 .authorizeHttpRequests((authZ) -> authZ
-                        .requestMatchers("/member/**").hasAnyRole("MEMBER", "MANAGER", "ADMIN")
+                        .requestMatchers("/member/**").authenticated()
+                        .requestMatchers("/post/**").authenticated()
                         .requestMatchers("/manager/**").hasAnyRole("MANAGER", "ADMIN")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll());

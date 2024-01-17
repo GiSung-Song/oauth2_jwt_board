@@ -43,6 +43,10 @@
 
 -> 로그인 실패 시 400 Error
 
+4. Post 관련 클래스 생성
+
+- Service Test 중 getPrincipal (인증 정보 객체)가 null -> 해결 중 (2024.01.17)
+
 ## 공부한 점
 
 ---
@@ -70,6 +74,13 @@ JPA 연관관계
 
 ---
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+
+- 접근 권한을 Protected로 한 이유는 Proxy 조회 때문
+- 즉시 로딩일 경우 실제 엔티티를 생성하므로 문제가 되지 않음
+- 지연 로딩 시 프록시 객체를 통해서 조회를 하기 때문에 private이면 프록시 객체를 생성 할 수 없음
+
+---
 
 ### 참조
 https://velog.io/@kevin_

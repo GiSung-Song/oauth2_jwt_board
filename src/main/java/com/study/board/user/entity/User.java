@@ -1,8 +1,12 @@
 package com.study.board.user.entity;
 
+import com.study.board.post.entityy.Post;
 import com.study.board.user.etc.Role;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -32,7 +36,16 @@ public class User {
 
     private String refreshToken; //JWT 리프레시 토큰
 
+    @OneToMany(mappedBy = "user")
+    private List<Post> posts = new ArrayList<>();
+
     public void updateRefreshToken(String updateRefreshToken) {
         this.refreshToken = updateRefreshToken;
+    }
+
+    //연관관계 매핑
+    public void addPost(Post post) {
+        posts.add(post);
+        post.setUser(this);
     }
 }
