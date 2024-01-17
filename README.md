@@ -1,6 +1,6 @@
 # OAuth2.0 + JWT Board
 
-## OAuth2.0 과 JWT를 이용한 Rest Api Board 만들기
+## OAuth2.0 과 JWT를 이용한 Board 만들기
 
 1. User 관련 class 생성
 
