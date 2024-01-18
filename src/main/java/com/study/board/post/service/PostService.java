@@ -38,12 +38,8 @@ public class PostService {
             throw new Exception("내용은 필수 입력 값 입니다.");
         }
 
-        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String userEmail = principal.getUsername();
 
-        log.info("userEmail : {}", userEmail);
-
-        User userEntity = userRepository.findByEmail(userEmail).orElseThrow(() -> new Exception("회원의 정보가 없습니다."));
+        User userEntity = getAuthenticationUser();
 
         Post post = Post.builder()
                 .subject(dto.getSubject())
@@ -60,14 +56,41 @@ public class PostService {
     public List<PostResDto> getAllPost() {
         List<Post> postList = postRepository.findAll();
 
-        return postList.stream().map(post -> toEntity(post)).collect(Collectors.toList());
+        return postList.stream().map(post -> toDto(post)).collect(Collectors.toList());
     }
 
-    public PostResDto toEntity(Post post) {
+    @Transactional
+    public void modifyPost(Long postId, PostRegDto postRegDto) throws Exception {
+        //해당 id의 게시글 존재하는지 판단
+        Post post = postRepository.findById(postId).orElseThrow(() -> new Exception("해당 게시글이 존재하지 않습니다."));
+
+        // 해당 게시글이 사용자의 게시글이 맞는지 판단
+        // 1. 인증된 회원 Entity
+        User userEntity = getAuthenticationUser();
+
+        // 2. 회원과 게시글 작성자의 ID 비교하여 다르면 throw
+        if (userEntity.getId() != post.getUser().getId()) {
+            throw new Exception("해당 게시글의 작성자가 아닙니다.");
+        }
+
+        // 3. 제목과 내용 변경
+        post.editPost(postRegDto);
+    }
+
+    public PostResDto toDto(Post post) {
         return PostResDto.builder()
                 .id(post.getId())
                 .subject(post.getSubject())
                 .localDateTime(post.getCreateTime())
                 .build();
+    }
+
+    private User getAuthenticationUser() throws Exception {
+        UserDetails principal = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String userEmail = principal.getUsername();
+
+        User userEntity = userRepository.findByEmail(userEmail).orElseThrow(() -> new Exception("회원의 정보가 없습니다."));
+
+        return userEntity;
     }
 }

@@ -1,5 +1,6 @@
 package com.study.board.post.entityy;
 
+import com.study.board.post.dto.PostRegDto;
 import com.study.board.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -33,5 +34,11 @@ public class Post {
     //연관관계 매핑
     public void setUser(User user) {
         this.user = user;
+    }
+
+    //게시글 수정
+    public void editPost(PostRegDto postRegDto) {
+        this.subject = postRegDto.getSubject();
+        this.content = postRegDto.getContent();
     }
 }

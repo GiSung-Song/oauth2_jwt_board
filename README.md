@@ -45,7 +45,10 @@
 
 4. Post 관련 클래스 생성
 
-- Service Test 중 getPrincipal (인증 정보 객체)가 null -> 해결 중 (2024.01.17)
+- Service Test 중 getPrincipal (인증 정보 객체)가 null
+- @MockCustomUser 어노테이션 생성하여 테스트 하였으나 계속해서 authentication을 가져오지 못하고 있음.
+- SecurityContext // Authentication Mock 생성하여 반환
+- 단위 테스트 진행
 
 ## 공부한 점
 

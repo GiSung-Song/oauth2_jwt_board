@@ -37,6 +37,7 @@ public class User {
     private String refreshToken; //JWT 리프레시 토큰
 
     @OneToMany(mappedBy = "user")
+    @Builder.Default
     private List<Post> posts = new ArrayList<>();
 
     public void updateRefreshToken(String updateRefreshToken) {
