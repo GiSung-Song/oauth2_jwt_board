@@ -85,6 +85,17 @@ JPA 연관관계
 
 ---
 
+stubbing : Mock 객체의 메서드 호출에 대한 예상된 반응, 반환 값을 미리 설정하는 작업 
+
+-> Repository나 Service 클래스의 메서드를 DB 연결 없이 원하는 결과를 반환하도록 설정 가능
+
+mocking : 실제 구현을 갖지 않는 가상의 객체를 생성하는 작업
+
+-> Repository, Service, Controller 등의 컴포넌트를 Mock 객체로 생성하여 테스트 환경에서의 동작 단순화
+
+Spying : 실제 객체를 기반으로 Mock 객체를 생성
+
+-> 실제 DB연동과 같은 일부 동작을 유지하며, 특정 메서드만 Stubbing하여 복잡성을 줄임
 ### 참조
 https://velog.io/@kevin_
 

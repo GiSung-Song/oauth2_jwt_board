@@ -77,11 +77,33 @@ public class PostService {
         post.editPost(postRegDto);
     }
 
+    @Transactional(readOnly = true)
+    public PostResDto getPost(Long postId) throws Exception {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new Exception("해당 게시글이 존재하지 않습니다."));
+
+        return toDto(post);
+    }
+
+    @Transactional
+    public void deletePost(Long postId) throws Exception {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new Exception("해당 게시글이 존재하지 않습니다."));
+
+        User user = getAuthenticationUser();
+
+        //게시글을 등록한 사용자가 아닌 경우
+        if (post.getUser().getId() != user.getId()) {
+            throw new Exception("자신이 등록한 게시글만 삭제할 수 있습니다.");
+        }
+
+        postRepository.delete(post);
+    }
+
     public PostResDto toDto(Post post) {
         return PostResDto.builder()
                 .id(post.getId())
                 .subject(post.getSubject())
                 .localDateTime(post.getCreateTime())
+                .content(post.getContent())
                 .build();
     }
 

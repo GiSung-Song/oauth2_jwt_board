@@ -45,10 +45,12 @@ class PostServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    private com.study.board.user.entity.User user;
+
     //Authentication 설정
     @BeforeEach
     void setUp() {
-        com.study.board.user.entity.User user = com.study.board.user.entity.User.builder()
+        user = com.study.board.user.entity.User.builder()
                 .email("test@test.com")
                 .password("password")
                 .role(Role.MEMBER)
@@ -119,18 +121,17 @@ class PostServiceTest {
     @Test
     @DisplayName("수정 케이스")
     void editPost() throws Exception {
-        Post post = new Post(0L, "수정전", null, "수정전", null);
+        Post post = new Post(0L, "수정전", user, "수정전", null);
+
+        when(postRepository.findById(any())).thenReturn(Optional.ofNullable(post));
+
+        Post findPost = postRepository.findById(0L).get();
+
         PostRegDto postRegDto = new PostRegDto();
         postRegDto.setContent("수정후");
         postRegDto.setSubject("수정후");
 
-        doReturn(post).when(postRepository)
-                .save(post);
-
-        postService.modifyPost(0L, postRegDto);
-
-        doReturn(post).when(postRepository)
-                        .findById(0L);
+        postService.modifyPost(findPost.getId(), postRegDto);
 
         Assertions.assertThat(post.getSubject()).isEqualTo("수정후");
     }
