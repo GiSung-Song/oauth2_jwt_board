@@ -100,6 +100,8 @@ Spring Security -> permitAll()은 인증 처리 결과를 무시 / 필터 체인
 
 Custom Filter 빈 등록 시 WebSecurityCustomizer에 ignoring()이 적용되지 않음
 
+OncePerRequestFilter 의 shouldNotFilter 를 오버라이딩하여 특정 URI에 대해 Filter 미진행
+
 ---
 
 ### 참조
