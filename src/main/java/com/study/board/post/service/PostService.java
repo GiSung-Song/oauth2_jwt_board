@@ -38,7 +38,6 @@ public class PostService {
             throw new Exception("내용은 필수 입력 값 입니다.");
         }
 
-
         User userEntity = getAuthenticationUser();
 
         Post post = Post.builder()

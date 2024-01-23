@@ -31,6 +31,21 @@ public class JwtAuthenticationProcessingFilter extends OncePerRequestFilter {
     private GrantedAuthoritiesMapper authoritiesMapper = new NullAuthoritiesMapper();
 
     @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
+
+        log.info("shouldNotFilter 탔음");
+
+        String excludePath = "/post";
+        String path = request.getRequestURI();
+
+        if (request.getMethod().equalsIgnoreCase("GET") && path.equalsIgnoreCase(excludePath)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         log.info("1. 필터 호출");

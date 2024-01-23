@@ -97,7 +97,13 @@ Spying : 실제 객체를 기반으로 Mock 객체를 생성
 
 -> 실제 DB연동과 같은 일부 동작을 유지하며, 특정 메서드만 Stubbing하여 복잡성을 줄임
 
-----
+---
+
+Spring Security -> permitAll()은 인증 처리 결과를 무시 / 필터 체인 정상 작동
+
+Custom Filter 빈 등록 시 WebSecurityCustomizer에 ignoring()이 적용되지 않음
+
+---
 
 ### 참조
 https://velog.io/@kevin_
