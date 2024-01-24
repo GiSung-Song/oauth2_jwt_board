@@ -46,7 +46,7 @@ public class PostController {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.getWriter().write(e.getMessage());
 
-            throw new RuntimeException(e);
+            return null;
         }
 
     }
