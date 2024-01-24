@@ -53,13 +53,26 @@ public class PostController {
 
 //    @PreAuthorize("hasAnyRole('ADMIN', 'MEMBER', 'MANAGER')")
     @PatchMapping("/post/{id}")
-    public void editPost(@PathVariable("id") Long postId, @RequestBody PostRegDto postRegDto) throws Exception {
-        postService.modifyPost(postId, postRegDto);
+    public String editPost(@PathVariable("id") Long postId, @RequestBody PostRegDto postRegDto) {
+        try {
+            postService.modifyPost(postId, postRegDto);
+
+            return postId + "번이 수정되었습니다.";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
     }
 
 //    @PreAuthorize("hasAnyRole('ADMIN', 'MEMBER', 'MANAGER')")
     @DeleteMapping("/post/{id}")
-    public void deletePost(@PathVariable("id") Long postId) throws Exception {
-        postService.deletePost(postId);
+    public String deletePost(@PathVariable("id") Long postId){
+        try {
+            postService.deletePost(postId);
+
+            return postId + "번이 삭제되었습니다.";
+        } catch (Exception e) {
+            return e.getMessage();
+        }
+
     }
 }
